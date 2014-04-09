@@ -16,10 +16,10 @@ Visualise your offices, locations, project sites etc. in the  design of your web
 The plugin allows for multiple maps (Mapimages) to be integrated on different pages. It also plugin also supports multilanguage sites.
 
 To wrap up - the WP Design Maps & Places is:
-    * Design friendly. Design your own map and link it to geographic coordinates.
-    * Easy to manage. The site administrator can add and publish new locations in seconds without having to involve a designer.
-    * Lightweight. The map loads quickly.
-    * Visitor friendly. A self-designed map allows you to fade out distracting information.        
+* Design friendly. Design your own map and link it to geographic coordinates.
+* Easy to manage. The site administrator can add and publish new locations in seconds without having to involve a designer.
+* Lightweight. The map loads quickly.
+* Visitor friendly. A self-designed map allows you to fade out distracting information.        
 
 == Installation ==
 
@@ -39,7 +39,7 @@ That's it!
     - the images can have wrong height/width proportion, but proportions on one axis should be the same. You can use maps of cities, countries or parts of them. 
  
 * How my map can be connected to geolocation?
-    - there are two ways to bound your map to geocoordinates – “Calibrate via Google Map” (the link in “Map Manager”) or by definition of two reference points.
+    - there are two ways to bound your map to geocoordinates - "Calibrate via Google Map" (the link in "Map Manager") or by definition of two reference points.
    
 * What is a reference point?
     - a reference point is like a pin which binds your map to the real geographic map. In order to calculate the position of a location on the map image two reference points are needed.
@@ -48,7 +48,7 @@ That's it!
     - you need to have an about a place (part of address) on your map. If the image itself does not contain any places you can do the positioning by using other markings (borders, rivers, mountains etc). After you find a point which can be used as the reference point on the map, go to "Maps" and do click on this point. Enter the address of this point into the field in the newly opening dialogue. The address may contain country, post code, city, street -- Google will find it. However, we recommend to always enter the country as part of the address as some city names occur more than once (e.g. "Naples (Italy) and Naples (Florida, USA).
     
 * How do I upload a map or marker images?
-    - Go to "Maps Manager" and click "Add Map". In the "Media Library" dialogue you can either upload a new map image or reuse an already existing one. To define the marker images for every map, click “Add / Remove Markers”.
+    - Go to "Maps Manager" and click "Add Map". In the "Media Library" dialogue you can either upload a new map image or reuse an already existing one. To define the marker images for every map, click "Add / Remove Markers".
 
 * How many maps can I place on one page?
     - the current version allows for only one map per page.
@@ -57,7 +57,7 @@ That's it!
     - you can upload the images of the markers into the <WP plugin directory>/images/markers directory. The images must have the extensions "png", "jpg", "gif" or "jpeg".
 
 * How can I apply own styles or effects on markers and Place Popups?
-	-	In “Settings” you can find the CSS and Effects edit fields. Put your css or JavaScript there. The content of the fields will be inserted to your front-, and backend HTML.
+	-	In "Settings" you can find the CSS and Effects edit fields. Put your css or JavaScript there. The content of the fields will be inserted to your front-, and backend HTML.
 	Example of the CSS selector which can be used for marker images for Map with id=2:
 		#mapoverlay[mapid='2']>.ctrl
 	The popups can be addressed by:
