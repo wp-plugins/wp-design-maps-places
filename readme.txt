@@ -72,6 +72,7 @@ That's it!
 
 == Changelog ==
 v0.6 (08.2014)
+
 * added function wp_design_map_and_places_front($mapid, $lang) which prints a map to be called from PHP code 
 * remeved unused javascript files
 * bug caused by always loaded wp_enqueue_media() solved 
@@ -79,7 +80,9 @@ v0.6 (08.2014)
 * CSS: limited width=100% for the #mapcontainer for compatibility with themes without width defined on the entry
 * corrected blog specific installation for Multisite WP
 * changes in upgrade procedure (options update)
+
 v0.5 (09.04.2014)
+
 * first release
 
 == Upgrade Notice ==
