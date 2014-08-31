@@ -6,8 +6,8 @@
 Plugin Name: WP Design Maps & Places
 Plugin URI: http://amazingweb.de/
 Description: Put Places on your own Map image (not on the Google Map as other plugins) 
-Version: 0.5
-Author: amazingweb GmbH
+Version: 0.6
+Author: alexanderherdt, amazingweb-gmbh
 Author URI: http://amazingweb.de/
 License: GPLv2 or later
 */
@@ -28,7 +28,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-define('WPDMP_VERSION', '0.5');
+define('WPDMP_VERSION', '0.6');
 define('WPDMP_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('WPDMP_PLUGIN_DIR', dirname(__FILE__) );
 
@@ -49,13 +49,10 @@ register_activation_hook( __FILE__, 'wpdmp_update_check' );
 //register_activation_hook( __FILE__, 'wpdmp_install_data' );
 
 if ( !function_exists('wpdmp_update_check') ):
-   function wpdmp_update_check($network_wide) {      
-       if (get_site_option( 'wpdmp_version' ) != WPDMP_VERSION) {
-           wpdmp_upgrade(WPDMP_VERSION, get_site_option( 'wpdmp_version' ),$network_wide);
-       }
+   function wpdmp_update_check($network_wide) {             
+   		wpdmp_upgrade(WPDMP_VERSION, get_site_option( 'wpdmp_version' ),$network_wide);       
    }
 endif;
-add_action( 'plugins_loaded', 'wpdmp_update_check' );
 
 if ( !function_exists('wpdmp_add_actions') ):
 	function wpdmp_add_actions() {

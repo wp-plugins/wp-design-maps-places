@@ -58,6 +58,15 @@
 	position:relative;
 }
 
+/*for 'entry' (parent of the #mapcontainer) without defined width*/
+#mapcontainer.frontmap #mapimage{
+	width:100%;
+}
+#mapoverlay img{
+	padding:0;
+	margin:0;
+}
+
 #mapoverlay,#mappopups{
 	position:absolute;
 }
@@ -319,6 +328,7 @@ div.ui-dialog{
 }
 
 .mappopup a:hover,.mappopup a:active, .mappopup a:focus{
+	color: #4C6791;
 	background: url(../images/icon-link-arrow-mouse.png) right 4px no-repeat;
 }
 

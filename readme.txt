@@ -1,10 +1,10 @@
 === WP Design Maps & Places ===
-Contributors: alexander.herdt
+Contributors: alexander.herdt, amazingweb-gmbh
 Donate link: http://amazingweb.de/donation/
 Tags: google, google map, google maps, google places, designer map, map, map markers, maps, wp google map, wp google maps, wp maps
 Requires at least: 3.6
-Tested up to: 3.8.1
-Stable tag: trunk
+Tested up to: 3.9.2
+Stable tag: 0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,7 +71,16 @@ That's it!
 4. Put the shortcut on a post or page and enjoy your Map your website!
 
 == Changelog ==
-first release
+v0.6 (08.2014)
+* added function wp_design_map_and_places_front($mapid, $lang) which prints a map to be called from PHP code 
+* remeved unused javascript files
+* bug caused by always loaded wp_enqueue_media() solved 
+* CSS: set padding and margin of the places img to 0
+* CSS: limited width=100% for the #mapcontainer for compatibility with themes without width defined on the entry
+* corrected blog specific installation for Multisite WP
+* changes in upgrade procedure (options update)
+v0.5 (09.04.2014)
+* first release
 
 == Upgrade Notice ==
 just install

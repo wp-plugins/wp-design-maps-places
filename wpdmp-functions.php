@@ -50,7 +50,7 @@ if ( !function_exists('wpdmp_print_marker_manager_view') ):
             			</div>
             		</div>									
 				
-         			<div id="col-left">
+         			<div id="col-left" style="width:33%">
          			</div>
 				<!--/div-->
 			</div>
@@ -232,7 +232,7 @@ if ( !function_exists('wpdmp_print_address_find_form') ):
       			}
       		}
       	?>
-      	<input type='button'
+      	<input type='button' class="button-primary"
       				onclick='getCoords("<?php if($ref_mode){echo ".ui-dialog ";}?>#f_address","<?php if($ref_mode){echo ".ui-dialog ";}?>#f_latitude","<?php if($dialog_id=="modalCoordDialog"){echo ".ui-dialog ";}?>#f_longitude",<?php if($ref_mode){echo "false";}else {echo "true";}?>);'
       				tabindex='2' value=' Get coordinates ' id='getcoords' name='getcoords' <?php if ($but_disabled){echo "disabled='1'";} ?>/>
       	<?php if ($but_disabled){?>
@@ -306,7 +306,7 @@ function wpdmp_print_site_list($map)  {?>
 endif;
 
 if ( !function_exists('wpdmp_print_map_b') ):
-	function wpdmp_print_map_b($mapid,$printref,$cur_lang = '')  {
+	function wpdmp_print_map_b($mapid,$printref,$cur_lang = '',$frontview = false)  {
 
 		$map = wpdmp_get_map($mapid);
 		$def_lang = get_option( 'wpdmp_default_lang');
@@ -331,7 +331,7 @@ if ( !function_exists('wpdmp_print_map_b') ):
       }
       
 	  ?>
-	<div id="mapcontainer">
+	<div id="mapcontainer" <?php echo $frontview?'class="frontmap"':''?>>
 		<img id="mapimage" src='<?php echo $map['map']; ?>' mapid='<?php echo $map['id']; ?>' map='<?php echo $map['map']; ?>' refpoints='<?php echo $ref_in_attr; ?>' cur_lang='<?php echo $cur_lang;?>' popupoffsetx='<?php echo $map['popupoffsetx']; ?>' popupoffsety='<?php echo $map['popupoffsety']; ?>'/>
 		<div id="mapoverlay" mapid="<?php echo $map['id']; ?>">
 				

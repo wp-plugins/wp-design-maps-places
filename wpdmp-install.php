@@ -1,4 +1,7 @@
 <?php
+/**
+ * to be called for every upgrade without versions check
+ */
 function wpdmp_install() {
    global $wpdb;   
    
@@ -91,11 +94,24 @@ function wpdmp_install() {
    $opt = get_option ("wpdmp_install_log");
    update_option( "wpdmp_install_log", $opt . "\r\ntable 5 done:" . $step1 );
  
-   add_site_option( "wpdmp_version", WPDMP_VERSION );
-   add_option( "wpdmp_langs", array('en'));
-   add_option( "wpdmp_default_lang", "en");
+   add_site_option( "wpdmp_version", WPDMP_VERSION );   
+}
+
+/**
+ * 
+ */
+function wpdmp_update_options() {
    
-	add_option( "wpdmp_css", "/*   CSS FOR EUROPA MAP MARKER*/
+	if (!get_option("wpdmp_langs",false)){
+   		add_option( "wpdmp_langs", array('en'));
+	}
+	
+	if (!get_option("wpdmp_default_lang",false)){
+   		add_option( "wpdmp_default_lang", "en");
+	}
+   
+	//initial css (don't change to update, add a new delta var for changes)
+	$css = "/*   CSS FOR EUROPA MAP MARKER*/
 #mapoverlay[mapid=\'2\'] .ctrl, #mapoverlay[mapid=\'3\'] .ctrl {
    width: 25px;
    height: 25px;
@@ -133,9 +149,10 @@ function wpdmp_install() {
 }
 #mapoverlay[mapid=\'2\'] .mappopupwrap:hover + #mapoverlay[mapid=\'2\'] .ctrl{
     transform: scale(2);
-}*/");
+}*/";
 	
-	add_option( "wpdmp_effects", "/* THE NAME OF THE FUNCTION MUST BE add_custom_effects() */
+	//initial effects (don't change to update, add a new delta var for changes)
+	$effects = "/* THE NAME OF THE FUNCTION MUST BE add_custom_effects() */
 function add_custom_effects(){
 	add_custom_effects_map(2);
 	add_custom_effects_map(3);
@@ -179,8 +196,21 @@ function checkZoom(el){
 	}else{
 		marker_zoom(el,false);
 	}
-} ");
-   
+} ";
+	
+	if (!get_option("wpdmp_css",false)){
+		//initial css by first setup
+		add_option( "wpdmp_css", $css);
+	}else{
+		//paceholder for the changes of the css
+	}
+	
+	if (!get_option("wpdmp_effects",false)){
+		//initial css by first setup
+		add_option( "wpdmp_effects", $effects);
+	}else{
+		//paceholder for the changes of the css
+	}
    
    $step1 = date('Y-m-d H:i:s');
    $opt = get_option ("wpdmp_install_log");
@@ -189,7 +219,6 @@ function checkZoom(el){
 
 /**
  * 
- * TBD: visuallize install status
  * 
  */
 function wpdmp_install_data() {
@@ -303,10 +332,21 @@ function get_default_images($subdir, $id_index){
 	return $out;
 }
 
+/**
+ * main updgrade/install function to be called by hook. Prepared for MultiSite and standalone WP.
+ * 
+ * @param string $new_version
+ * @param string $current_version
+ * @param boolean $networkwide
+ */
 function wpdmp_upgrade( $new_version, $current_version, $networkwide) {
    global $wpdb;
    
    if (function_exists('is_multisite') && is_multisite()) {
+   	   		
+   		$opt = get_option ("wpdmp_install_log");
+   		update_option( "wpdmp_install_log", $opt . "\r\nIt's a Multisite." );
+   	
         if ($networkwide) {
              $old_blog = $wpdb->blogid;
 
@@ -318,9 +358,14 @@ function wpdmp_upgrade( $new_version, $current_version, $networkwide) {
             switch_to_blog($old_blog);
             
         } else{
+        	$step1 = date('Y-m-d H:i:s');
+        	$opt = get_option ("wpdmp_install_log");
+        	update_option( "wpdmp_install_log", $opt . "\r\nBlog: " . $wpdb->blogid . "\r\nInstall for one blog1:" . $step1 );
         	wpdmp_upgrade_blog( $new_version, $current_version);
         } 
     }else{
+       $opt = get_option ("wpdmp_install_log");
+       update_option( "wpdmp_install_log", $opt . "\r\nIt's NOT a Multisite." );
        wpdmp_upgrade_blog( $new_version, $current_version);
     }
     
@@ -328,20 +373,40 @@ function wpdmp_upgrade( $new_version, $current_version, $networkwide) {
     update_site_option( "wpdmp_version", WPDMP_VERSION );
 }
    
+/**
+ * Upgrade/install function called internally for one blog
+ * 
+ * @param string $new_version
+ * @param string $current_version
+ */
 function wpdmp_upgrade_blog( $new_version, $current_version){
-     
+    global $wpdb;
+	
 	$step1 = date('Y-m-d H:i:s');
     $opt = get_option ("wpdmp_install_log");
-    update_option( "wpdmp_install_log", $opt . "\r\nBlog: " . $wpdb->blogid . "\r\n1:" . $step1 );
+    update_option( "wpdmp_install_log", $opt . "\r\nBlog: " . $wpdb->blogid . "\r\n2:" . $step1 );
         
 	if ($current_version == 0 || empty($current_version)){
-        wpdmp_install();        
+		//new installation for the network
+        wpdmp_install();     
+        wpdmp_update_options();
         wpdmp_install_data();
-     }elseif($new_version != $current_version){
-     	wpdmp_install(); //update DB, no need to add default data
+     }else{     	
+     	//not new installation for the network
+     	$maps_table_name = $wpdb->prefix . "wpdmp_map";
+     	if($wpdb->get_var("SHOW TABLES LIKE '$maps_table_name'") != $maps_table_name) {
+     		//new installation for the blog
+     		wpdmp_install();
+     		wpdmp_update_options();
+     		wpdmp_install_data();
+     	}else{
+     		//not new installation for the blog
+     		//TBD: update default data (delta) by an upgrade
+     		wpdmp_install(); //update DB, no need to add default data
+     		wpdmp_update_options();
+     	}
      }
-     
-     //wpdmp_install_data();
+          
      $opt = get_option ("wpdmp_install_log");
      $step4 = date('Y-m-d H:i:s');
      update_option( "wpdmp_install_log", $opt . "\r\n4:" . $step4 );

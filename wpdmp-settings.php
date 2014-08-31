@@ -44,7 +44,7 @@ if ( !function_exists('wpdmp_settings_view_inner') ):
          		</fieldset>
 			</div>
 	
-			<div id="col-left">
+			<div id="col-left" style="width:33%">
 				<fieldset class="wpdmp-fieldset">
 					<legend>Languages available</legend>
 					<p>Define the codes of languages you need. The codes are only used for map shortcut. E.g. for English it could be "en", "ENG" or "English", it does not matter.</p>  
@@ -118,6 +118,9 @@ if ( !function_exists('wpdmp_settings_view_inner') ):
          				$jq("input[name='aw_link']:radio").change(function() {aw_link_changed($jq(this).val());});
          			</script>
          		</fieldset>
+         		
+         		<?php do_action("wpdmp_settings_after_col_left")?>
+         		
 			</div>
 	</div>	
 	<?php }
