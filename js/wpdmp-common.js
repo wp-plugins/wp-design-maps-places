@@ -379,11 +379,32 @@ function set_marker(id,lat,lng,desc,marker,markerimg){
 function add_effects(){
 	
 	$jq('.ctrl').on('mouseenter', function(event){
+		
+			//adjust position of the popup if it's partially out of the screen 
+			docw = $jq(window).width();
+			mapx = $jq('#mapimage').offset().left;
+		
 			$jq('.mappopupwrap').hide();
+			
+			if (!$jq('.'+event.target.id+'_mo').attr('initleft')){
+				$jq('.'+event.target.id+'_mo').attr('initleft',parseInt($jq('.'+event.target.id+'_mo').css('left')));
+			}
+			popupcssleft = parseInt($jq('.'+event.target.id+'_mo').attr('initleft'));
+			
+			popupright = 
+				mapx + 
+				popupcssleft +
+				$jq('.'+event.target.id+'_mo').width() -
+				$jq(window).scrollLeft(); 
+			
+			if (popupright > docw){				
+				$jq('.'+event.target.id+'_mo').css('left', popupcssleft - (popupright - docw)+'px');
+			}else{
+				$jq('.'+event.target.id+'_mo').css('left', popupcssleft + 'px');
+			}
+			
 			$jq('.'+event.target.id+'_mo').fadeIn('fast');});
 		
-	/* do via class(!) on dynamic elements*/   
-	//$jq('.ctrl').on('mouseenter', function(event){$jq('.'+event.target.id+'_mo').fadeIn('fast');});	
 	$jq('.mappopup').on('mouseleave', function(event){$jq('.mappopupwrap').fadeOut('slow');});
 	
 	$jq('.ref').on('mouseenter', function(event){
@@ -396,11 +417,6 @@ function add_effects(){
 	/*}catch(e){
 		alert('The custom effects could not be loaded.');
 	}*/
-	
-	/* do via class(!) on dynamic elements*/   
-	//$jq('.ref').on('mouseenter', function(event){$jq('.'+event.target.id+'_mo').fadeIn('fast');});   
-	//$jq('.mappopupwrap').on('mouseleave', function(event){$jq('.mappopupwrap').fadeOut('slow');});
-
 }
 /*
 function add_effects(){

@@ -3,8 +3,8 @@ Contributors: alexander.herdt, amazingweb-gmbh
 Donate link: http://amazingweb.de/donation/
 Tags: google, google map, google maps, google places, designer map, map, map markers, maps, wp google map, wp google maps, wp maps
 Requires at least: 3.6
-Tested up to: 3.9.2
-Stable tag: 0.6
+Tested up to: 4.1.1
+Stable tag: 0.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,9 @@ That's it!
 4. Put the shortcut on a post or page and enjoy your Map your website!
 
 == Changelog ==
+v0.6.1 (03.2015)
+* position of popups on the right side will be adapted if they are partially out of the screen. The adjustment is done for every mouse over event.   
+
 v0.6 (08.2014)
 
 * added function wp_design_map_and_places_front($mapid, $lang) which prints a map to be called from PHP code 
