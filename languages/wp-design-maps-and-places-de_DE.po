@@ -1,0 +1,578 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpdmp\n"
+"POT-Creation-Date: 2015-08-14 16:00+0530\n"
+"PO-Revision-Date: 2015-08-16 15:31+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.3\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wpdmp-admin.php:27
+msgid "Maps & Places"
+msgstr ""
+
+#: wpdmp-admin.php:28
+msgid "WP Design Maps & Places - Map manager"
+msgstr ""
+
+#: wpdmp-admin.php:28
+msgid "Map manager"
+msgstr ""
+
+#: wpdmp-admin.php:29
+msgid "WP Design Maps & Places - Settings"
+msgstr ""
+
+#: wpdmp-admin.php:29
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: wpdmp-admin.php:124 wpdmp-functions.php:25
+msgid "Preview map"
+msgstr "Vorschau"
+
+#: wpdmp-admin.php:211
+msgid "Marker successfully updated!"
+msgstr "Ort aktualisiert!"
+
+#: wpdmp-admin.php:212
+msgid "Success"
+msgstr "Erledigt"
+
+#: wpdmp-admin.php:215 wpdmp-db.php:473
+msgid "FAILURE: marker could not be updated!"
+msgstr "Fehler: Der Ort kann nicht aktualisiert werden!"
+
+#: wpdmp-admin.php:216 wpdmp-admin.php:232 wpdmp-admin.php:236
+#: wpdmp-admin.php:240
+msgid "Error"
+msgstr "Fehler"
+
+#: wpdmp-admin.php:219
+msgid ""
+"0 reference points are defined. You need to define 2 points before a Place "
+"can be added!"
+msgstr ""
+"Sie haben bislang keine Referenzpunkte festgelegt. Erstellen Sie 2 "
+"Referenzpunkte, bevor Sie eine Markierung erzeugen können."
+
+#: wpdmp-admin.php:220
+msgid "Add 2 reference"
+msgstr "2. Referenzpunkt hinzufügen"
+
+#: wpdmp-admin.php:223
+msgid ""
+"1 reference point is defined. You need to define 2 points before a Place can "
+"be added!"
+msgstr ""
+"Sie haben bislang nur 1 Referenzpunkt festgelegt. Sie benötigen noch einen, "
+"bevor Sie eine Markierung erzeugen können."
+
+#: wpdmp-admin.php:224
+msgid "Add 1 more reference"
+msgstr "Einen weiteren Referenzpunkt hinzufügen"
+
+#: wpdmp-admin.php:227
+msgid ""
+"You can define only 2 reference points. To define a new one, remove one of "
+"the existing."
+msgstr ""
+"Sie können nur 2 Referenzpunkte festlegen. Um einen neuen Referenzpunkt zu "
+"erstellen, löschen Sie bitte zuvor einen bestehenden Referenzpunkt."
+
+#: wpdmp-admin.php:228
+msgid "Remove one reference"
+msgstr "Referenzpunkt löschen"
+
+#: wpdmp-admin.php:231
+msgid "Please check the address, Google returns: "
+msgstr "Bitte überprüfen Sie die Adresse. Google-Meldung:"
+
+#: wpdmp-admin.php:235
+msgid "The location not found or the 'Get Coordinates' button not pressed"
+msgstr ""
+"Der Ort wurde nicht gefunden oder der \"Koordinaten ermitteln“-Button wurde "
+"nicht betätigt"
+
+#: wpdmp-admin.php:239
+msgid "FAILURE: Reference point could not be created!"
+msgstr "Fehler: Der Referenzpunkt kann nicht erstellt werden!"
+
+#: wpdmp-admin.php:243
+msgid ""
+"The language code should be maximum of 2 letters. E.g. for English it could "
+"be \"en\"."
+msgstr "Der Sprach-Code darf maximal 2 Buchstaben lang sein."
+
+#: wpdmp-admin.php:244
+msgid "Failure!"
+msgstr "Fehler!"
+
+#: wpdmp-admin.php:247
+msgid "Please input numbers(e.g. 5, -10 etc)"
+msgstr "Geben Sie Abstand ein (in Zahlen, z.B. 5, -10 usw.)"
+
+#: wpdmp-admin.php:248
+msgid "Invalid"
+msgstr ""
+
+#: wpdmp-attach-file.php:37
+#, php-format
+msgid "The uploaded file could not be moved to %s."
+msgstr "Die hochgeladene Datei kann nicht auf %s verschoben werden."
+
+#: wpdmp-calibration.php:7
+msgid ""
+"Type the location on your map to position the Google Map, e.g. Germany or "
+"Munich or Black Sea:"
+msgstr ""
+"Geben Sie einen Ort ein, zu dem die Google Maps-Karte positioniert werden "
+"soll, z.B. \"Deutschland\", \"Berlin\" oder \"Nordsee\":"
+
+#: wpdmp-calibration.php:9
+msgid " Pane Google Map to "
+msgstr "Google Maps zum Ort bewegen"
+
+#: wpdmp-calibration.php:17
+msgid "Save"
+msgstr "Speichern"
+
+#: wpdmp-db.php:126
+msgid "Error: image not found"
+msgstr "Fehler: Bild nicht gefunden"
+
+#: wpdmp-db.php:145
+msgid ""
+"Error: the map could not be saved (Check whether the attachment is already "
+"used)!"
+msgstr ""
+"Fehler: die Karte kann nicht gespeichert werden (Überprüfen Sie, ob die "
+"Mediadatei schon benutzt wird)!"
+
+#: wpdmp-db.php:171
+msgid "Error: the map could not be removed!"
+msgstr "Fehler: die Karte kann nicht gelöscht werden."
+
+#: wpdmp-db.php:208
+msgid "map removed"
+msgstr "Karte entfernt"
+
+#: wpdmp-db.php:324
+msgid "ERROR: delete of markers failed!"
+msgstr "Fehler: Ort konnte nicht entfernt werden!"
+
+#: wpdmp-db.php:331
+msgid "ERROR: insert of a marker failed!"
+msgstr "Fehler: Ort konnte nicht erzeugt werden!"
+
+#: wpdmp-db.php:463
+msgid "FAILURE: marker description could not be updated!"
+msgstr "Fehler: Ortsbeschreibung konnte nicht aktualisiert werden!"
+
+#: wpdmp-db.php:580
+msgid "popup offset saved"
+msgstr "Popup Abstand gespeichert"
+
+#: wpdmp-db.php:583
+msgid ""
+"Error: offset could not be saved. Check that the values are numbers (e.g. 5, "
+"-10 etc.)"
+msgstr ""
+"Fehler: Abstand konnte nicht gespeichert werden. Überprüfen Sie die Werte, "
+"es müssen numerische Werte sein (z.B. \"-5\", \"10\")"
+
+#: wpdmp-db.php:607
+msgid "popup location saved"
+msgstr "Popup Position gespeichert"
+
+#: wpdmp-db.php:610
+msgid "Error: popup location could not be saved."
+msgstr "Fehler: Popup Position konnte nicht gespeichert werden."
+
+#: wpdmp-db.php:633
+msgid "map marked as free hand map"
+msgstr "Die Karte ist als \"Freihandkarte\" markiert."
+
+#: wpdmp-db.php:636
+msgid "Error: the map could not be saved as \"Free Hand Map\""
+msgstr "Fehler: die Karte konnte nicht als \"Freihandkarte\" markiert werden."
+
+#: wpdmp-functions.php:28
+msgid "Map file:"
+msgstr "Karte (Datei):"
+
+#: wpdmp-functions.php:38
+msgid " (RE)LOAD MAP "
+msgstr "Karte (neu)laden"
+
+#: wpdmp-functions.php:74
+msgid "Remove map including ALL markers?"
+msgstr "Wollen Sie die Karte samt ALLE Orte löschen?"
+
+#: wpdmp-functions.php:75
+msgid ""
+"The map and all its markers will be permanently deleted and cannot be "
+"recovered. Are you sure?"
+msgstr ""
+"Die Karte und alle Orte werden gelöscht werden. Sind Sie sicher das Sie das "
+"tun möchten?"
+
+#: wpdmp-functions.php:89
+msgid ""
+"Freehand Map. You can define your Places by clicking on the image in the "
+"\"Maps &amp; Places\""
+msgstr ""
+"Nicht-geographische Karte. Sie können Orte erzeugen indem Sie auf die Karte "
+"klicken (in \"Maps &amp; Places\")"
+
+#: wpdmp-functions.php:97
+msgid ""
+"Two reference points are defined. You can remove them and redefine them or "
+"go ahead and define your Places"
+msgstr ""
+"Die beiden Referenzpunkte sind nun definiert. Sie können die Referenzpunkte "
+"löschen und neu festlegen oder mit der Erstellung von Orten auf der Karte "
+"beginnen"
+
+#: wpdmp-functions.php:102
+#, php-format
+msgid ""
+"%d reference point(s) defined. You need to define two reference points. "
+"Click on the map at the point you know (a city you know). Tipp: take a point "
+"on a border or river.<br/>Alternatively you can define the Map as "
+"<Strong>'Free Hand Map'</Strong> where you can place Markers without "
+"coordinates, just by clicking on the map."
+msgstr ""
+"%d Referenzpunkte sind definiert. Zwei Referenzpunkte müssen definiert "
+"werden. Klicken Sie eine Stelle an der Karte die Sie kennen (z.B. eine "
+"Stadt, einen Fluss). <br/>Alternativ können Sie die Karte als "
+"<Strong>'Freihandskarte'</Strong> deklarieren. Auf der Karte können Sie dann "
+"die Markierungen mit einfachen Mousclicks ohne Geocoordinaten erzeugen."
+
+#: wpdmp-functions.php:104
+msgid " USE THE IMAGE WITHOUT GEO LOCATION "
+msgstr "Bild ohne Geolokalisierung nutzen"
+
+#: wpdmp-functions.php:119
+msgid "Maps available"
+msgstr "Karten"
+
+#: wpdmp-functions.php:121
+msgid " ADD NEW MAP "
+msgstr "Karte hinzufügen"
+
+#: wpdmp-functions.php:136
+msgid "File:"
+msgstr "Datei:"
+
+#: wpdmp-functions.php:140
+msgid "Markers:"
+msgstr "Bilder:"
+
+#: wpdmp-functions.php:146
+msgid "Add / Remove Markers"
+msgstr "Bilder hinzufügen oder löschen"
+
+#: wpdmp-functions.php:149
+msgid "Status:"
+msgstr "Status:"
+
+#: wpdmp-functions.php:152
+msgid "Calibrate via Google Map"
+msgstr "Kalibrieren mit Google Map"
+
+#: wpdmp-functions.php:158
+msgid "Sites:"
+msgstr "Orte:"
+
+#: wpdmp-functions.php:162
+msgid "Short code:"
+msgstr ""
+
+#: wpdmp-functions.php:166
+msgid "Popup offset:"
+msgstr "Pop-up Abstand:"
+
+#: wpdmp-functions.php:171 wpdmp-functions.php:184
+msgid " SAVE "
+msgstr "Speichern"
+
+#: wpdmp-functions.php:176
+msgid "Popup location"
+msgstr "Pop-up Position"
+
+#: wpdmp-functions.php:179
+msgid "Can be outside of the map"
+msgstr "Darf außerhalb des Kartenbildes sein"
+
+#: wpdmp-functions.php:180
+msgid "Keep inside the map"
+msgstr "Darf nur innerhalb des Kartenbildes sein"
+
+#: wpdmp-functions.php:193
+msgid " DELETE MAP "
+msgstr "Karte löschen"
+
+#: wpdmp-functions.php:197
+msgid " VIEW MAP "
+msgstr "Karte anzeigen"
+
+#: wpdmp-functions.php:215
+msgid "freehand"
+msgstr "Nicht-geographische Karte"
+
+#: wpdmp-functions.php:220
+msgid "2 reference points are defined"
+msgstr "2 Referenzpunkte wurden definiert"
+
+#: wpdmp-functions.php:222
+msgid "1 reference point is missing"
+msgstr "Ein Referenzpunkt fehlt"
+
+#: wpdmp-functions.php:224
+msgid "both of reference points are missing"
+msgstr "Beide Referenzpunkte fehlen"
+
+#: wpdmp-functions.php:254
+msgid "Enter address of location (e.g. \"Germany Munich\"):"
+msgstr "Geben Sie eine Adresse ein (z.B. \"München Deutschland\")"
+
+#: wpdmp-functions.php:272
+msgid " Get coordinates "
+msgstr "Koordinaten ermitteln"
+
+#: wpdmp-functions.php:274 wpdmp-functions.php:529
+msgid "No Markers defined for the Map. Please define first (in 'Map Manager')."
+msgstr ""
+"Keine Markierungsbilder sin festgelegt. Legen Sie diese fest (in 'Map "
+"Manager')"
+
+#: wpdmp-functions.php:277
+msgid "Latitude:"
+msgstr "Breitengrad"
+
+#: wpdmp-functions.php:283
+msgid "Longitude:"
+msgstr "Längengrad"
+
+#: wpdmp-functions.php:300
+msgid "Map new place"
+msgstr "Neuen Ort markieren"
+
+#: wpdmp-functions.php:304
+msgid "Click on the map to create a new place."
+msgstr "Klicken Sie auf der Karte um auf dieser einen neuen Ort zu erstellen"
+
+#: wpdmp-functions.php:313
+msgid "Name"
+msgstr "Name"
+
+#: wpdmp-functions.php:318
+msgid "Popup description, use HTML to format, e.g. &lt;br/&gt; for newline:"
+msgstr ""
+"Popuptext, benutzen Sie HTML beim Formatieren, z.B. &lt;br/&gt; für eine "
+"neue Zeile:"
+
+#: wpdmp-functions.php:330
+msgid " ADD MARKER "
+msgstr "Markierung hinzufügen"
+
+#: wpdmp-functions.php:334
+msgid " SAVE MARKER "
+msgstr "Ort speichern"
+
+#: wpdmp-functions.php:340
+msgid "Places list"
+msgstr "Orte"
+
+#: wpdmp-functions.php:383
+msgid "Map file: "
+msgstr "Bilddatei"
+
+#: wpdmp-functions.php:396
+msgid "Delete reference point"
+msgstr "Referenzpunkt löschen"
+
+#: wpdmp-functions.php:422
+msgid "Plugin by amazingweb.de"
+msgstr ""
+
+#: wpdmp-functions.php:482
+msgid "REMOVE"
+msgstr "Löschen"
+
+#: wpdmp-functions.php:483
+msgid "SAVE"
+msgstr "Speichern"
+
+#: wpdmp-functions.php:514
+msgid "Select place marker:"
+msgstr "Bild für Ortsmarkierung wählen:"
+
+#: wpdmp-functions.php:600
+#, php-format
+msgid "%d markers could not be removed because they are used."
+msgstr "%d Bilder können nicht entfernt werden, weil sie benutzt werden."
+
+#: wpdmp-install.php:252
+msgid "Installation: error during preparing of maps!"
+msgstr "Installation: Fehler beim Vorbereiten der Karten!"
+
+#: wpdmp-install.php:262
+msgid "Installation: error during preparing of maps (popups offset)!"
+msgstr "Installation: Fehler beim Vorbereiten der Karten (Popup Abstand)!"
+
+#: wpdmp-install.php:281
+msgid "Installation: error during preparing of markers!"
+msgstr "Installation: Fehler beim Vorbereiten der Markierungsbilder!"
+
+#: wpdmp-install.php:284
+#, php-format
+msgid "Installation: error during upload of the marker %s to attachment!"
+msgstr "Installation: Fehler beim Hochladen des Markierungsbilds %s zu Medien!"
+
+#: wpdmp-install.php:290
+#, php-format
+msgid "Installation: error during upload of the map %s to attachment!"
+msgstr "Installation: Fehler beim Hochladen des Kartenbilds %s zu Medien!"
+
+#: wpdmp-settings.php:9
+msgid "Remove the language including ALL descriptions in this language?"
+msgstr ""
+"Wollen Sie die Sprache samt ALLE Ortsbeschreibungen in der Sprache löschen?"
+
+#: wpdmp-settings.php:10
+msgid ""
+"The language and all description in this language will be permanently "
+"deleted and cannot be recovered. Are you sure?"
+msgstr ""
+"Wollen Sie die Sprache samt ALLE Ortsbeschreibungen in der Sprache wirklich "
+"löschen?"
+
+#: wpdmp-settings.php:23
+msgid "Please Donate"
+msgstr "Hier spenden"
+
+#: wpdmp-settings.php:24
+msgid "If you like this plugin, here's how you can say 'Thank You'"
+msgstr ""
+"Sie mögen unser Plugin? Hier können Sie sich mit einer Spende bedanken."
+
+#: wpdmp-settings.php:34
+msgid "Appearance"
+msgstr "Design"
+
+#: wpdmp-settings.php:36
+msgid "Map & Places styles (CSS)"
+msgstr ""
+
+#: wpdmp-settings.php:39
+msgid "Effects (JavaScript)"
+msgstr "Effekte (JavaScript)"
+
+#: wpdmp-settings.php:43
+msgid " SAVE CSS AND EFFECTS "
+msgstr "CSS und Effekte speichern"
+
+#: wpdmp-settings.php:50
+msgid "Languages available"
+msgstr "Verfügbare Sprachen"
+
+#: wpdmp-settings.php:51
+msgid ""
+"Define the codes of languages you need. The codes are only used for map "
+"shortcut. Use only 2 letters to create a code. E.g. for English it could be "
+"\"en\"."
+msgstr ""
+"Legen Sie die Sprachen an, die Sie benötigen. Die Codes dienen nur der "
+"Kennzeichnung bei den Map-Shortcuts verwendet (z.B. für Englisch können Sie "
+"„EN“ verwenden). Ein Code darf maximal 2 Buchstaben lang sein."
+
+#: wpdmp-settings.php:66
+#, php-format
+msgid "Default Language (used by %d markers)"
+msgstr "Standardsprache (benutzt bei %d Markierungen)"
+
+#: wpdmp-settings.php:69
+#, php-format
+msgid "Remove language (used by %d markers)"
+msgstr "Sprache entfernen (benutzt bei %d Markierungen)"
+
+#: wpdmp-settings.php:78
+msgid " ADD NEW LANGUAGE "
+msgstr "Neue Sprache hinzufügen"
+
+#: wpdmp-settings.php:86
+msgid "Default Language"
+msgstr "Standardsprache"
+
+#: wpdmp-settings.php:87
+msgid ""
+"The default language is used if a marker's description is not available for "
+"a requested language"
+msgstr ""
+"Die Standardsprache wird benutzt, falls für die Beschreibung eines Ortes "
+"einmal keine Sprachversion hinterlegt wurde"
+
+#: wpdmp-settings.php:117
+msgid "Link to our Homepage"
+msgstr "Link auf unsere Website"
+
+#: wpdmp-settings.php:118
+msgid ""
+"If you like the plugin please support us by the link to our homepage from "
+"the map image (right lower corner)"
+msgstr ""
+"Falls Ihnen das Plugin gefällt, unterstützen Sie uns bitte, indem Sie auf "
+"dem Kartenbild mit einem Link auf unsere Website verweisen (rechte untere "
+"Ecke)"
+
+#: wpdmp-settings.php:119
+msgid "Yes, I allow to set the link"
+msgstr "Ja, setzt den Link!"
+
+#: wpdmp-settings.php:120
+msgid "No, no link please"
+msgstr "Nein, keinen Link bitte"
+
+#: wpdmp-settings.php:142
+#, php-format
+msgid "Error: the language '%s' already exists!"
+msgstr "Fehler: die Sprache '%s' ist schon angelegt."
+
+#: wpdmp-settings.php:156
+msgid "Remove language (used by 0 markers)"
+msgstr "Sprache entfernen (verwendet bei 0 Places)"
+
+#: wpdmp-settings.php:223
+msgid "link_updated"
+msgstr ""
+
+#~ msgid ""
+#~ "Two reference points are defined. You can remove the point(s) and "
+#~ "redefine again or go to define your Places"
+#~ msgstr ""
+#~ "Die beiden Referenzpunkte sind nun definiert. Sie können die "
+#~ "Referenzpunkte löschen und neu festlegen oder mit der Erstellung von "
+#~ "Orten auf der Karte beginnen"
+
+#~ msgid "Enter address of the site to map (e.g. \"Germany Munich\"):"
+#~ msgstr "Geben Sie eine Adresse ein (z.B. \"München Deutschland\")"
+
+#~ msgid ""
+#~ "Define the codes of languages you need. The codes are only used for map "
+#~ "shortcut. E.g. for English it could be \"en\", \"ENG\" or \"English\", it "
+#~ "does not matter."
+#~ msgstr ""
+#~ "Legen Sie die Sprachen an, die Sie benötigen. Die Codes dienen nur der "
+#~ "Kennzeichnung bei den Map-Shortcuts verwendet (z.B. für Englisch können "
+#~ "Sie wahlweise „EN“, \"ENG\" oder \"English\" verwenden)"
