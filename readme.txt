@@ -13,6 +13,8 @@ The plugin allows you to mark places on a CUSTOM MAP coherent with the style of 
 == Description ==
 Visualise your offices, locations, project sites etc. in the  design of your website! Integrate your self-designed map and marker images into your website and easily add new locations by just entering the address or geographic coordinates. The plugin uses the comfortable geolocation feature from Google Geocoder (Google Maps).
 
+You can use your Maps also WITHOUT GEO coordinates. It can be used e.g. to show a plan of an exhibition.
+
 The plugin allows for multiple maps (Mapimages) to be integrated on different pages. It also plugin also supports multilanguage sites.
 
 To wrap up - the WP Design Maps & Places is:
