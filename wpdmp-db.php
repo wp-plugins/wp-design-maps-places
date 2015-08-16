@@ -79,6 +79,18 @@ if ( !function_exists('wpdmp_get_ref_points') ):
    }
 endif;
 
+if ( !function_exists('wpdmp_get_map_type') ):
+function wpdmp_get_map_type($mapid)  {
+	 
+	global $wpdb;
+
+	$table_name = $wpdb->prefix . "wpdmp_map";
+	$map_type = $wpdb->get_results($wpdb->prepare("SELECT type FROM $table_name WHERE id=%d",$mapid),ARRAY_A);
+
+	return $map_type[0]['type'];
+}
+endif;
+
 if ( !function_exists('wpdmp_delete_ref_point') ):
 	function wpdmp_delete_ref_point() {		
       global $wpdb;
@@ -109,8 +121,11 @@ if ( !function_exists('wpdmp_add_map_callback') ):
       
       $att = wp_get_attachment_image_src( $_POST['attachmentid'], 'full' );
       
+      $image_not_found_error = array(
+      		'code' => 'ERROR',
+      		'msg' =>__('Error: image not found','wp-design-maps-and-places'));
       if (!$att){
-         echo "Error: image not found";         	
+         echo json_encode($image_not_found_error);      	
          die();
          exit; 
          
@@ -125,9 +140,11 @@ if ( !function_exists('wpdmp_add_map_callback') ):
 			'mapwidth' => $mapwidth, 
 			'mapheight' => $mapheight
 	      ) );
-
+      $map_save_error = array(
+      		'code' => 'ERROR',
+      		'msg' =>__('Error: the map could not be saved (Check whether the attachment is already used)!','wp-design-maps-and-places'));
 	  if ($rows_affected != 1){
-	     echo "Error: the map could not be saved (Check whether the attachment is already used)!";
+	     echo json_encode($map_save_error);
 	     die();
 	     exit;
 	  }
@@ -149,9 +166,11 @@ if ( !function_exists('wpdmp_delete_map_callback') ):
         array( 
 			'id' => $id			
 	      ) );
-      
+     $map_remove_error = array(
+     		'code' => 'ERROR' , 
+     		'msg' => __('Error: the map could not be removed!','wp-design-maps-and-places'));
      if ($deleted != 1){
-        echo "Error: the map could not be removed!";
+        echo json_encode($map_remove_error);
         die();
         exit;
      }
@@ -184,7 +203,10 @@ if ( !function_exists('wpdmp_delete_map_callback') ):
 			'mapid' => $id
 	      ) );
 
-	 echo 'map removed';
+     $map_remove_success = array(
+     		'code' => 'SUCCESS' ,
+     		'msg' => __('map removed','wp-design-maps-and-places'));
+	 echo json_encode($map_remove_success);
 	 die();
       exit;
    }
@@ -299,14 +321,14 @@ if ( !function_exists('wpdmp_set_markers_available') ):
       if (sizeof($to_delete)>0){
 	      $deleted = $wpdb->query($wpdb->prepare("DELETE FROM $table_name WHERE mapid=%d AND markerimg in (".implode(",",$to_delete).")",$mapid));
 	      if ($deleted != sizeof($to_delete)){
-	      	return "ERROR: delete of markers failed!";
+	      	return array('code' => 'ERROR','msg' => __('ERROR: delete of markers failed!','wp-design-maps-and-places'));
 	      }
       }
       
       foreach($to_add as &$add){
       	$insresult = $wpdb->insert($table_name, array("mapid" => $mapid, "markerimg" => $add));
       	if ($insresult != 1){
-      		return "ERROR: insert of a marker failed!";
+      		return array('code' => 'ERROR','msg' => __('ERROR: insert of a marker failed!','wp-design-maps-and-places'));
       	}
       }
       
@@ -419,7 +441,7 @@ if ( !function_exists('wpdmp_add_marker_callback') ):
 	      ) );
 	      
       $mid = $wpdb->insert_id;
-	   	   
+       	  
       if ($mid != false){      
          $table_name = $wpdb->prefix . "wpdmp_marker_descr"; 
          
@@ -436,13 +458,21 @@ if ( !function_exists('wpdmp_add_marker_callback') ):
                ));
             }
             if ($rows_affected != 1){
-               echo 'error wpdmp_add_marker_callback';
+            	$marker_descr_error = array(
+	           		'code' => 'ERROR',
+	            	'msg' => __('FAILURE: marker description could not be updated!','wp-design-maps-and-places')	
+            	);
+               echo json_encode($marker_descr_error);
                die();
                exit;
             }
          }
       }else{
-         echo 'error wpdmp_add_marker_callback';
+      	$add_marker_error = array(
+      			'code' => 'ERROR',
+      			'msg' => __('FAILURE: marker could not be updated!','wp-design-maps-and-places')
+      	);
+         echo json_encode($add_marker_error);
          die();
          exit;
       }  
@@ -545,13 +575,73 @@ if ( !function_exists('wpdmp_save_popup_offset_callback') ):
       
       $rows_affected = $wpdb->update($table_name, array( 'popupoffsetx' => $offsetx, 'popupoffsety' => $offsety ), array( 'id' => $mapid ) );
       
+      $popup_offset_save_success = array(
+      		'code' => 'SUCCESS', 
+      		'msg' => __('popup offset saved','wp-design-maps-and-places'));
+      $popup_offset_save_error = array(
+      		'code' => 'ERROR', 
+      		'msg' => __('Error: offset could not be saved. Check that the values are numbers (e.g. 5, -10 etc.)','wp-design-maps-and-places'));
+      
       if ($rows_affected != false){
-         echo 'popup offset saved';
+         echo json_encode($popup_offset_save_success);
       }else{
-         echo 'Error: offset could not be saved. Check that the values are numbers (e.g. 5, -10 etc.)';
+         echo json_encode($popup_offset_save_error);
       }
       die();
       exit;
+	}
+endif;
+
+if ( !function_exists('wpdmp_save_popup_location_callback') ):
+function wpdmp_save_popup_location_callback() {
+	global $wpdb;
+
+	$mapid = $_POST['mapid'];
+	$pop_location = $_POST['val'];	
+	$table_name = $wpdb->prefix . "wpdmp_map";
+
+	$rows_affected = $wpdb->update($table_name, array( 'popuplocation' => $pop_location), array( 'id' => $mapid ) );
+	
+	$popup_location_save_success = array(
+      		'code' => 'SUCCESS', 
+      		'msg' => __('popup location saved','wp-design-maps-and-places'));
+	$popup_location_save_error = array(
+			'code' => 'ERROR',
+			'msg' => __('Error: popup location could not be saved.','wp-design-maps-and-places'));
+
+	if ($rows_affected != false){
+		echo json_encode($popup_location_save_success);
+	}else{
+		echo json_encode($popup_location_save_error);
+	}
+	die();
+	exit;
+}
+endif;
+
+if ( !function_exists('wpdmp_mark_free_hand_map_callback') ):
+function wpdmp_mark_free_hand_map_callback() {
+	global $wpdb;
+	
+	$mapid = $_POST['mapid'];	
+	$table_name = $wpdb->prefix . "wpdmp_map";
+	
+	$rows_affected = $wpdb->update($table_name, array( 'type' => 'freehand'), array( 'id' => $mapid ) );
+	
+	$freehand_map_success = array(
+      		'code' => 'SUCCESS', 
+      		'msg' => __('map marked as free hand map','wp-design-maps-and-places'));
+	$freehand_map_error = array(
+			'code' => 'ERROR',
+			'msg' => __('Error: the map could not be saved as "Free Hand Map"','wp-design-maps-and-places'));
+	
+	if ($rows_affected != false){
+		echo json_encode($freehand_map_success);
+	}else{
+		echo json_encode($freehand_map_error);
+	}
+	die();
+	exit;
 	}
 endif;
 ?>

@@ -22,7 +22,7 @@ function codeAddress(address,latFieldId, lngFieldId, callback) {
     	}
     	
     }else{
-    	alert ("Please check the address, Google returns: " + status);
+    	displayPopupMsg(wpdmp_popup.check_addr.msg,wpdmp_popup.check_addr.title);
     }
   });  
   return status;

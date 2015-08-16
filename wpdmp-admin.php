@@ -24,9 +24,9 @@ $markers = array();
 if ( !function_exists('wpdmp_plugin_menu') ):
 	function wpdmp_plugin_menu() {
 		//$hook = 
-		add_menu_page('Maps & Places', 'Maps & Places', 'publish_posts', 'wpdmp_admin', 'wpdmp_admin_view');
-		add_submenu_page( 'wpdmp_admin', 'WP Design Maps & Places - Map manager', 'Map manager', 'publish_posts', 'wpdmp_map_manager', 'wpdmp_map_manager_view');      		
-		add_submenu_page( 'wpdmp_admin', 'WP Design Maps & Places - Settings', 'Settings', 'publish_posts', 'wpdmp_settings', 'wpdmp_settings_view');
+		add_menu_page(__('Maps & Places','wp-design-maps-and-places'), __('Maps & Places','wp-design-maps-and-places'), 'publish_posts', 'wpdmp_admin', 'wpdmp_admin_view');
+		add_submenu_page( 'wpdmp_admin', __('WP Design Maps & Places - Map manager','wp-design-maps-and-places'), __('Map manager','wp-design-maps-and-places'), 'publish_posts', 'wpdmp_map_manager', 'wpdmp_map_manager_view');      		
+		add_submenu_page( 'wpdmp_admin', __('WP Design Maps & Places - Settings','wp-design-maps-and-places'), __('Settings','wp-design-maps-and-places'), 'publish_posts', 'wpdmp_settings', 'wpdmp_settings_view');
 		//add_action('admin_print_styles-'.$hook, 'wpdmp_admin_script');			
 	}
 endif;
@@ -46,6 +46,9 @@ if ( !function_exists('wpdmp_admin_script') ):
 		wp_enqueue_script('wpdmp-common', WPDMP_PLUGIN_URL . 'js/wpdmp-common.js',array('jquery-ui-dialog','imagesloaded','wpdmp-coords'), false, false);
 		//needed for tabs...
 		wp_enqueue_style('wpdmp-tabs-styles', WPDMP_PLUGIN_URL . "css/ui-tabs.css", false, WPDMP_VERSION, "screen");
+		
+		//for multilanguage support in javascript messages
+		wpdmp_localize_scripts();
 		
 		if ($_GET['page'] != 'wpdmp_settings' && strpos($_GET['page'],'wpdmp_')===0){
 			
@@ -88,6 +91,7 @@ endif;
 
 if ( !function_exists('wpdmp_admin_view') ):
 	function wpdmp_admin_view() {
+		wpdmp_print_popup_dialog();
 		wpdmp_print_marker_manager_view();		
 		?>
 		<script type="text/javascript">						
@@ -100,25 +104,24 @@ endif;
 
 if ( !function_exists('wpdmp_map_manager_view') ):
 	function wpdmp_map_manager_view() {
-	
+		wpdmp_print_popup_dialog();
 	   //$mapid = $_GET['mapid'];
-   $maps = wpdmp_get_maps();
-   //load first found map as default
-   if ($mapid == ''){  			   
-      $map = $maps[0];
-      $mapid = $maps[0]['id'];
-   }else{
-      $map = wpdmp_get_map($mapid);            			   
-   }
-   $map_name = $map['map'];
-   $map_path = $map['map'];//print_map_url($map_name);
+		$maps = wpdmp_get_maps();
+	   //load first found map as default
+	   if ($mapid == ''){  			   
+	      $map = $maps[0];
+	      $mapid = $maps[0]['id'];
+	   }else{
+	      $map = wpdmp_get_map($mapid);            			   
+	   }
+	   $map_name = $map['map'];
+	   $map_path = $map['map'];//print_map_url($map_name);
 	   ?>
 	
 	<div class="wrap">
 	
 	<div id="col-right">
-		<h1>Preview map</h1>
-		<p>Map file: <span id="mappath" mapid="<?php echo $mapid;?>"><?php echo $map_path; ?></span></p>
+		<h1><?php _e('Preview map','wp-design-maps-and-places'); ?></h1>
 	<?php 
 	   wpdmp_print_map_manager($mapid,'backend_map_manager');
 	   ?>
@@ -199,6 +202,57 @@ if ( !function_exists('wpdmp_show_message') ):
 		}
 		echo '<div id="message" class="updated fade"><p><strong>'.$message.'</strong></p></div>';
 	}
+endif;
+
+if(!function_exists('wpdmp_localize_scripts')):
+function wpdmp_localize_scripts() {
+	$user_messages = array(
+			'marker_success' => array(
+					'msg'=>__('Marker successfully updated!','wp-design-maps-and-places'),
+					'title'=>__('Success','wp-design-maps-and-places')
+					),
+			'marker_failure' => array(
+					'msg'=>__('FAILURE: marker could not be updated!','wp-design-maps-and-places'),
+					'title'=>__('Error','wp-design-maps-and-places')
+					),
+			'add_two_ref' => array(
+					'msg'=>__('0 reference points are defined. You need to define 2 points before a Place can be added!','wp-design-maps-and-places'),
+					'title'=>__('Add 2 reference','wp-design-maps-and-places')
+					),
+			'add_one_ref' => array(
+					'msg'=>__('1 reference point is defined. You need to define 2 points before a Place can be added!','wp-design-maps-and-places'),
+					'title'=>__('Add 1 more reference','wp-design-maps-and-places')
+					),
+			'remove_ref' => array(
+					'msg'=>__('You can define only 2 reference points. To define a new one, remove one of the existing.','wp-design-maps-and-places'),
+					'title'=>__('Remove one reference','wp-design-maps-and-places')
+					),
+			'check_addr' => array(
+					'msg'=>__('Please check the address, Google returns: ','wp-design-maps-and-places'),
+					'title'=>__('Error','wp-design-maps-and-places')
+					),
+			'alert_msg' => array(
+					'msg'=>__('The location not found or the \'Get Coordinates\' button not pressed','wp-design-maps-and-places'),
+					'title'=>__('Error','wp-design-maps-and-places')
+					),
+			'ref_fail' => array(
+					'msg'=>__('FAILURE: Reference point could not be created!','wp-design-maps-and-places'),
+					'title'=>__('Error','wp-design-maps-and-places')
+					),
+			'add_lang_fail' => array(
+					'msg' =>__('The language code should be maximum of 2 letters. E.g. for English it could be "en".','wp-design-maps-and-places'),
+					'title' =>__('Failure!','wp-design-maps-and-places')
+					),	
+			'popup_offset_validation_error' => array(
+					'msg' => __('Please input numbers(e.g. 5, -10 etc)','wp-design-maps-and-places'),
+					'title' => __('Invalid','wp-design-maps-and-places')
+					)
+	);
+	wp_localize_script('wpdmp-common','wpdmp_popup',$user_messages);
+	wp_localize_script('wpdmp-coords','wpdmp_popup',$user_messages);
+	wp_localize_script('wpdmp_map_manager','wpdmp_popup',$user_messages);
+	wp_localize_script('wpdmp-settings','wpdmp_popup',$user_messages);
+}
 endif;
 
 /*if ( !function_exists('wpdmp_admin_head') ):

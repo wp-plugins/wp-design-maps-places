@@ -1,10 +1,10 @@
 === WP Design Maps & Places ===
-Contributors: alexander.herdt, amazingweb-gmbh
+Contributors: alexander.herdt, amazingweb-gmbh, benohead
 Donate link: http://amazingweb.de/donation/
 Tags: google, google map, google maps, google places, designer map, map, map markers, maps, wp google map, wp google maps, wp maps
 Requires at least: 3.6
-Tested up to: 4.1.1
-Stable tag: 0.6.1
+Tested up to: 4.2.4
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,8 @@ Visualise your offices, locations, project sites etc. in the  design of your web
 The plugin allows for multiple maps (Mapimages) to be integrated on different pages. It also plugin also supports multilanguage sites.
 
 To wrap up - the WP Design Maps & Places is:
-* Design friendly. Design your own map and link it to geographic coordinates.
+
+* Design friendly. Design your own map and link it to geographic coordinates if needed. You can also use the map as 'Freehand' map and put your places just by mouse clicks.
 * Easy to manage. The site administrator can add and publish new locations in seconds without having to involve a designer.
 * Lightweight. The map loads quickly.
 * Visitor friendly. A self-designed map allows you to fade out distracting information.        
@@ -71,7 +72,15 @@ That's it!
 4. Put the shortcut on a post or page and enjoy your Map your website!
 
 == Changelog ==
+v1.0 (08.2015)
+
+* 'Freehand' map type added. You can use this to place marker on an image WITHOUT GEO coordinates. It can be used e.g. to show a plan of an exhibition.
+* Translation to german added
+* New options for Popups: 'keep inside the map'
+* UI improvements
+
 v0.6.1 (03.2015)
+
 * position of popups on the right side will be adapted if they are partially out of the screen. The adjustment is done for every mouse over event.   
 
 v0.6 (08.2014)

@@ -34,7 +34,7 @@ function wpdmp_create_attachment_from_file($filepath){
 		else
 			$error_path = basename( $uploads['basedir'] ) . $uploads['subdir'];
 
-		return sprintf( __('The uploaded file could not be moved to %s.' ), $error_path ) ;
+		return sprintf( __('The uploaded file could not be moved to %s.','wp-design-maps-and-places' ), $error_path ) ;
 	}
 
 	// Set correct file permissions

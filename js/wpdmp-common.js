@@ -60,9 +60,10 @@ function save_marker(id){
 			$jq('#savemarker-'+id).css('display','none');
 			add_onchange_handler(id);
 			
-			alert ("Marker successfully updated!");
+			displayPopupMsg(wpdmp_popup.marker_success.msg,wpdmp_popup.marker_success.title);
+			
 		}else{
-			alert ("FAILURE: marker could not be updated!");
+			displayPopupMsg(wpdmp_popup.marker_failure.msg,wpdmp_popup.marker_failure.title);
 		}
 		
 		toggleProgressBar();
@@ -78,7 +79,21 @@ function add_marker(){
 	var desc = '';
 	$jq('.descr_langs-new').each(function(){desc = desc + $jq(this).attr('lang')+'$%$'+$jq(this).val()+"#%#";});//
 
-	var data = {
+	var data;
+	
+	if (get_maptype_from_map()=='freehand'){
+		data = {
+				action  	: 'add_marker',
+				mapid		: $jq('#mapimage').attr('mapid'),
+				address 	: $jq('#f_address').val(),
+				lat 		: $jq('#freeX').val(),
+				lng 		: $jq('#freeY').val(),
+				desc 		: desc,			
+				marker		: $jq('input[name=marker-new]:checked').val(),
+				nt			: (new Date().getTime())
+			};
+	}else{
+		data = {
 			action  	: 'add_marker',
 			mapid		: $jq('#mapimage').attr('mapid'),
 			address 	: $jq('#f_address').val(),
@@ -88,12 +103,15 @@ function add_marker(){
 			marker		: $jq('input[name=marker-new]:checked').val(),
 			nt			: (new Date().getTime())
 		};
-	
+	}
 	toggleProgressBar();
 	
 	$jq.post(ajaxurl, data, function(response) {
 		var marker = JSON.parse(response);
-		if (typeof marker !== 'undefined'){
+		if(marker.code == 'ERROR') {
+			displayPopupMsg(marker.msg,marker.code);
+		}
+		else{
 			set_marker(marker.id,marker.lat,marker.lng,marker.descr,marker.marker,marker.markerimg);
 			add_effects();
 			
@@ -104,9 +122,7 @@ function add_marker(){
 			$jq('#tabs-'+marker.id).tabs();
 			add_onchange_handler(marker.id);
 			
-			alert ("Marker successfully created!");
-		}else{
-			alert ("FAILURE: marker could not be created!");
+			displayPopupMsg(wpdmp_popup.marker_success.msg,wpdmp_popup.marker_success.title);
 		}
 		toggleProgressBar();
 	});
@@ -196,6 +212,7 @@ function reload_map(mapid,id,learn,mode){
 				
 				if (mode == 'backend_marker_manager'){
 					reload_site_list(mapid);
+					attach_click_mapoverlay();
 				}
 			} 
 			if (mode == 'backend_map_manager_google'){
@@ -259,53 +276,82 @@ function get_refpoints_from_map(){
 	return refs;		
 }
 
+function get_maptype_from_map(){	
+	return $jq('#mapimage').attr('maptype');
+}
+
 /*
 * correctScale parameter is used in front-mode: if the image is scaled, the coordinates must be corrected.
 * It can be used also in backend, but no use case as of now. Backend is "under control" (front end - up to user)  
 */
 function align_markers(){
-	var refs = get_refpoints_from_map();
 	
-	if (refs == null){
-		alert('0 reference points are defined. You need to define 2 points before a Place can be added!');
-		return;
-	}
+	if (get_maptype_from_map()!='freehand'){
 	
-	refpoint1 = refs[0];
-	refpoint2 = refs[1];
-	
-	if (typeof refpoint1 === "undefined" || typeof refpoint2 === "undefined"){
-		alert('One reference point is defined. You need to define 2 points before a Place can be added!');
-		return;
-	}
-	
-	//correct scale of current map to size of the refpoints' map 
-	dw1 = getImageWidth('mapimage') / refpoint1.mapwidth;
-	dw2 = getImageWidth('mapimage') / refpoint2.mapwidth;
-	dh1 = getImageHeight('mapimage') / refpoint1.mapheight;
-	dh2 = getImageHeight('mapimage') / refpoint2.mapheight;
-	
-	var pxlng = Math.abs(refpoint1.x - refpoint2.x)/Math.abs(refpoint1.lng - refpoint2.lng);
-	
-	$jq('.ctrl').each(function() {
-	
-		var lat = $jq(this).attr('lat');
-		var lng = $jq(this).attr('lng');
-		var dy = getMarkerYForLatMerkator(lat, refpoint1, refpoint2, dh1, dh2);  
-		var dx = ((refpoint1.x + (lng - refpoint1.lng)*pxlng)*dw1 + (refpoint2.x + (lng - refpoint2.lng)*pxlng)*dw2)/2;
+		var refs = get_refpoints_from_map();
 		
-	   
-		//positioning of the marker's image to center
-		imh = $jq(this).height()/2;
-		imw = $jq(this).width()/2;
+		if (refs == null){
+			displayPopupMsg(wpdmp_popup.add_two_ref.msg,wpdmp_popup.add_two_ref.title);
+			return;
+		}
 		
-		$jq(this).css('top',(dy-imh)+'px').css('left',(dx-imw)+'px').css('display','block');
-
-		//positioning of the popup 
-		var offsetx = parseInt($jq('#mapimage').attr('popupoffsetx'))+dx;
-		var offsety = parseInt($jq('#mapimage').attr('popupoffsety'))+dy;
-		$jq('.m_'+$jq(this).attr('mid')+'_mo').css('top',offsety+'px').css('left',offsetx+'px');
-	});
+		refpoint1 = refs[0];
+		refpoint2 = refs[1];
+		
+		if (typeof refpoint1 === "undefined" || typeof refpoint2 === "undefined"){
+			displayPopupMsg(wpdmp_popup.add_one_ref.msg,wpdmp_popup.add_one_ref.title);
+			return;
+		}
+		
+		//correct scale of current map to size of the refpoints' map 
+		dw1 = getImageWidth('mapimage') / refpoint1.mapwidth;
+		dw2 = getImageWidth('mapimage') / refpoint2.mapwidth;
+		dh1 = getImageHeight('mapimage') / refpoint1.mapheight;
+		dh2 = getImageHeight('mapimage') / refpoint2.mapheight;
+		
+		var pxlng = Math.abs(refpoint1.x - refpoint2.x)/Math.abs(refpoint1.lng - refpoint2.lng);
+		
+		$jq('.ctrl').each(function() {
+		
+			var lat = $jq(this).attr('lat');
+			var lng = $jq(this).attr('lng');
+			var dy = getMarkerYForLatMerkator(lat, refpoint1, refpoint2, dh1, dh2);  
+			var dx = ((refpoint1.x + (lng - refpoint1.lng)*pxlng)*dw1 + (refpoint2.x + (lng - refpoint2.lng)*pxlng)*dw2)/2;
+			
+		   
+			//positioning of the marker's image to center
+			imh = $jq(this).height()/2;
+			imw = $jq(this).width()/2;
+			
+			$jq(this).css('top',(dy-imh)+'px').css('left',(dx-imw)+'px').css('display','block');
+	
+			//positioning of the popup 
+			var offsetx = parseInt($jq('#mapimage').attr('popupoffsetx'))+dx;
+			var offsety = parseInt($jq('#mapimage').attr('popupoffsety'))+dy;
+			$jq('.m_'+$jq(this).attr('mid')+'_mo').css('top',offsety+'px').css('left',offsetx+'px');
+		});
+	}else if (get_maptype_from_map()=='freehand'){
+		$jq('.ctrl').each(function() {
+			
+			//for free hand map top and left devided by 100 are saved
+			var mleft = $jq(this).attr('lat')*100;
+			var mtop = $jq(this).attr('lng')*100;
+			
+			iw = getImageWidth('mapimage');			
+			ih = getImageHeight('mapimage'); 
+			
+			//positioning of the marker's image to center
+			imh = ($jq(this).height()/ih)*100/2;
+			imw = ($jq(this).width()/iw)*100/2;
+			
+			$jq(this).css('top',(mtop-imh)+'%').css('left',(mleft-imw)+'%').css('display','block');
+			
+			//positioning of the popup 
+			var offsetx = pixelToPro(parseInt($jq('#mapimage').attr('popupoffsetx')),iw)+mleft;
+			var offsety = pixelToPro(parseInt($jq('#mapimage').attr('popupoffsety')),ih)+mtop;
+			$jq('.m_'+$jq(this).attr('mid')+'_mo').css('top',offsety+'%').css('left',offsetx+'%');
+		});
+	}
 }
 
 function align_refpoints(){
@@ -333,47 +379,84 @@ function add_temp_place(lat,lng,descr){
 
 function set_marker(id,lat,lng,desc,marker,markerimg){
  
-	var refs = get_refpoints_from_map();
-	
-	if (refs == null){
-		alert('0 reference points are defined. You need to define 2 points before a Place can be added!');
-		return;
+	if (get_maptype_from_map()!='freehand'){
+		var refs = get_refpoints_from_map();
+		
+		if (refs == null){
+			displayPopupMsg(wpdmp_popup.add_two_ref.msg,wpdmp_popup.add_two_ref.title);
+			return;
+		}
+		
+		refpoint1 = refs[0];
+		refpoint2 = refs[1];
+		
+		if (typeof refpoint1 === "undefined" || typeof refpoint2 === "undefined"){
+			displayPopupMsg(wpdmp_popup.add_one_ref.msg,wpdmp_popup.add_one_ref.title);
+			return;
+		}
+		
+		var pxlng = Math.abs(refpoint1.x - refpoint2.x)/Math.abs(refpoint1.lng - refpoint2.lng);
+		//var pxlat = Math.abs(refpoint1.y - refpoint2.y)/Math.abs(refpoint1.lat - refpoint2.lat);
+	 
+		$jq('#mapoverlay').prepend('<img class="ctrl" id="m_'+id+'" src="'+markerimg+'"/>');   
+	 	
+		var dy = getMarkerYForLatMerkator(lat, refpoint1, refpoint2,1,1); 
+			//((refpoint1.y + (refpoint1.lat - lat)*pxlat) + (refpoint2.y + (refpoint2.lat - lat)*pxlat))/2;
+		var dx = ((refpoint1.x + (lng - refpoint1.lng)*pxlng) + (refpoint2.x + (lng - refpoint2.lng)*pxlng))/2;
+	 
+		//var mw = $jq('#m_'+id).css('width');
+		//var mh = $jq('#m_'+id).css('height');
+		var imh = $jq('#m_'+id).height()/2;
+		var imw = $jq('#m_'+id).width()/2;
+		
+		$jq('#m_'+id).css('top',(dy-imh)+'px').css('left',(dx-imw)+'px');
+		
+		var cur_desc = ''; 
+		try{
+			cur_desc = eval('desc.'+$jq('#mapimage').attr('cur_lang')+'.descr');
+		}catch(err){
+			//do nothing, happens in case of adding of a temp place
+		}
+		
+		var offsetx = parseInt($jq('#mapimage').attr('popupoffsetx'))+dx;
+		var offsety = parseInt($jq('#mapimage').attr('popupoffsety'))+dy;
+		$jq('#mapoverlay').append('<div class="m_'+id+'_mo mappopupwrap" style="top:'+offsety+'px;left:'+offsetx+'px;"><div class="mappopup" id="#m_'+id+'_mo">'+cur_desc+'</div></div>');
+	}else{
+		
+		$jq('#mapoverlay').prepend('<img class="ctrl" id="m_'+id+'" src="'+markerimg+'"/>');   
+	 	
+		//for free hand map top and left devided by 100 are saved
+		var mleft = lat*100;
+		var mtop = lng*100;
+		
+		iw = getImageWidth('mapimage');			
+		ih = getImageHeight('mapimage'); 
+		
+		//positioning of the marker's image to center
+		imh = pixelToPro($jq('#m_'+id).height(),ih)/2;
+		imw = pixelToPro($jq('#m_'+id).width(),iw)/2;
+		
+		$jq('#m_'+id).css('top',(mtop-imh)+'%').css('left',(mleft-imw)+'%');
+		
+		var cur_desc = ''; 
+		try{
+			cur_desc = eval('desc.'+$jq('#mapimage').attr('cur_lang')+'.descr');
+		}catch(err){
+			//do nothing, happens in case of adding of a temp place
+		}
+		
+		var offsetx = pixelToPro(parseInt($jq('#mapimage').attr('popupoffsetx')),iw)+mleft;
+		var offsety = pixelToPro(parseInt($jq('#mapimage').attr('popupoffsety')),ih)+mtop;
+		$jq('#mapoverlay').append('<div class="m_'+id+'_mo mappopupwrap" style="top:'+offsety+'%;left:'+offsetx+'%;"><div class="mappopup" id="#m_'+id+'_mo">'+cur_desc+'</div></div>');
 	}
-	
-	refpoint1 = refs[0];
-	refpoint2 = refs[1];
-	
-	if (typeof refpoint1 === "undefined" || typeof refpoint2 === "undefined"){
-		alert('1 reference point is defined. You need to define 2 points before a Place can be added!');
-		return;
-	}
-	
-	var pxlng = Math.abs(refpoint1.x - refpoint2.x)/Math.abs(refpoint1.lng - refpoint2.lng);
-	//var pxlat = Math.abs(refpoint1.y - refpoint2.y)/Math.abs(refpoint1.lat - refpoint2.lat);
- 
-	$jq('#mapoverlay').prepend('<img class="ctrl" id="m_'+id+'" src="'+markerimg+'"/>');   
- 	
-	var dy = getMarkerYForLatMerkator(lat, refpoint1, refpoint2,1,1); 
-		//((refpoint1.y + (refpoint1.lat - lat)*pxlat) + (refpoint2.y + (refpoint2.lat - lat)*pxlat))/2;
-	var dx = ((refpoint1.x + (lng - refpoint1.lng)*pxlng) + (refpoint2.x + (lng - refpoint2.lng)*pxlng))/2;
- 
-	//var mw = $jq('#m_'+id).css('width');
-	//var mh = $jq('#m_'+id).css('height');
-	var imh = $jq('#m_'+id).height()/2;
-	var imw = $jq('#m_'+id).width()/2;
-	
-	$jq('#m_'+id).css('top',(dy-imh)+'px').css('left',(dx-imw)+'px');
-	
-	var cur_desc = ''; 
-	try{
-		cur_desc = eval('desc.'+$jq('#mapimage').attr('cur_lang')+'.descr');
-	}catch(err){
-		//do nothing, happens in case of adding of a temp place
-	}
-	
-	var offsetx = parseInt($jq('#mapimage').attr('popupoffsetx'))+dx;
-	var offsety = parseInt($jq('#mapimage').attr('popupoffsety'))+dy;
-	$jq('#mapoverlay').append('<div class="m_'+id+'_mo mappopupwrap" style="top:'+offsety+'px;left:'+offsetx+'px;"><div class="mappopup" id="#m_'+id+'_mo">'+cur_desc+'</div></div>');
+}
+
+function pixelToPro(pixel,width){
+	return (pixel/width)*100;
+}
+
+function put_popup_inside_the_map(){
+	mapx = $jq('#mapimage').offset().left;
 }
 
 function add_effects(){
@@ -383,25 +466,85 @@ function add_effects(){
 			//adjust position of the popup if it's partially out of the screen 
 			docw = $jq(window).width();
 			mapx = $jq('#mapimage').offset().left;
+			mapwidth = $jq('#mapimage').width();
+			var doch = $jq(window).height();
+			var mapy = $jq('#mapimage').offset().top;
+			var mapheight = $jq('#mapimage').height();
 		
 			$jq('.mappopupwrap').hide();
 			
+			//first time only
 			if (!$jq('.'+event.target.id+'_mo').attr('initleft')){
-				$jq('.'+event.target.id+'_mo').attr('initleft',parseInt($jq('.'+event.target.id+'_mo').css('left')));
+				left = $jq('.'+event.target.id+'_mo').css('left');
+				var top = $jq('.'+event.target.id+'_mo').css('top');
+				if (left.indexOf('%')>-1){
+					units = '%';				
+				}else{
+					units = 'px';
+				}
+				
+				$jq('.'+event.target.id+'_mo').attr('initleft',parseFloat(left));
+				$jq('.'+event.target.id+'_mo').attr('inittop',parseFloat(top));
+				$jq('.'+event.target.id+'_mo').attr('units',units);
 			}
-			popupcssleft = parseInt($jq('.'+event.target.id+'_mo').attr('initleft'));
+			
+			popupcssleft = parseFloat($jq('.'+event.target.id+'_mo').attr('initleft'));
+			var popupcsstop = parseFloat($jq('.'+event.target.id+'_mo').attr('inittop'));
+			units = $jq('.'+event.target.id+'_mo').attr('units');
+			
+			if (units=="%"){
+				popupcssleft = popupcssleft*mapwidth/100;
+				popupcsstop = popupcsstop*mapheight/100;
+			}
 			
 			popupright = 
 				mapx + 
 				popupcssleft +
 				$jq('.'+event.target.id+'_mo').width() -
 				$jq(window).scrollLeft(); 
+				
+			var popupbottom = 
+				mapy +
+				popupcsstop +
+				$jq('.'+event.target.id+'_mo').height() -
+				$jq(window).scrollTop();
+				
 			
-			if (popupright > docw){				
-				$jq('.'+event.target.id+'_mo').css('left', popupcssleft - (popupright - docw)+'px');
-			}else{
-				$jq('.'+event.target.id+'_mo').css('left', popupcssleft + 'px');
+			changedx = 0;
+			changedy = 0;
+			
+			if ($jq('#mapimage').attr('popuplocation')==1){
+				//put inside the map - rigth
+				if (popupright > mapx + mapwidth - $jq(window).scrollLeft()){
+					changedx = popupright - mapx - mapwidth + $jq(window).scrollLeft();
+				}
+				
+				//left
+				if (popupcssleft < 0){
+					changedx = popupcssleft;
+				}
+				
+				//top
+				if(popupcsstop < 0){
+					changedy = popupcsstop;
+				}
+				
+				//bottom
+				if (popupbottom > mapy + mapheight - $jq(window).scrollTop()){
+					changedy = popupbottom - mapy - mapheight + $jq(window).scrollTop();
+				}
 			}
+			
+			//put inside the screen (right border only)
+			if (popupright - changedx > docw){				
+				changedx = popupright - docw;
+			}
+			//bottom
+			if (popupbottom - changedy > doch){				
+				changedy = popupbottom - doch;
+			}
+			$jq('.'+event.target.id+'_mo').css('left', popupcssleft - changedx + 'px');		
+			$jq('.'+event.target.id+'_mo').css('top', popupcsstop - changedy + 'px');	
 			
 			$jq('.'+event.target.id+'_mo').fadeIn('fast');});
 		
@@ -413,7 +556,9 @@ function add_effects(){
 	});
 	
 	//try{
+	if(typeof add_custom_effects === 'function'){
 		add_custom_effects();
+	}
 	/*}catch(e){
 		alert('The custom effects could not be loaded.');
 	}*/
@@ -608,4 +753,25 @@ function getMarkerYForLatMerkator(lat, refpoint1, refpoint2, dh1, dh2) {
 function getMarkerYForLatLinear(lat, refpoint1, refpoint2, dh1, dh2) {
 	var pxlat = Math.abs(refpoint1.y - refpoint2.y)/Math.abs(refpoint1.lat - refpoint2.lat);
 	return ((refpoint1.y + (refpoint1.lat - lat)*pxlat)*dh1 + (refpoint2.y + (refpoint2.lat - lat)*pxlat)*dh2)/2;
+}
+
+function displayPopupMsg(message,title){
+	$jq('#wpdmp_popup_dialog p').text(message);
+	$jq('#wpdmp_popup_dialog').dialog({
+		title:title,
+		width:400,
+		modal: true,
+		buttons: {"OK": function() {$jq( this ).dialog( "close" );}}
+	});
+}
+
+//To slide down/up the markerlist
+function expandMarkerInfo(id) {
+	$jq('document').ready(function() {
+		$jq("#markerprint_slider-"+ id).slideToggle(function() {
+			$jq("#slidericon-"+id).attr("class",function(i,class_value){
+				return $jq("#markerprint_slider-"+ id).is(':visible') ? class_value.replace('-down','-up'): class_value.replace('-up','-down');
+			});
+		});
+	});
 }

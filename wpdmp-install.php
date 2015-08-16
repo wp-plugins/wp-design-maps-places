@@ -18,6 +18,8 @@ function wpdmp_install() {
 		popupstyle TEXT,
 		popupoffsetx INT DEFAULT 0 NOT NULL,
 		popupoffsety INT DEFAULT 0 NOT NULL,
+		type VARCHAR(100) DEFAULT '' NOT NULL,
+		popuplocation SMALLINT DEFAULT 0 NOT NULL,
 		UNIQUE KEY id (id)
     );";
    
@@ -247,7 +249,7 @@ function wpdmp_install_data() {
 					   				'mapheight'=> $map_metadata['height']) );
 
 				if ($rows_affected!=1){
-					echo "Installation: error during preparing of maps!";
+					_e('Installation: error during preparing of maps!','wp-design-maps-and-places');
 				}
 				 
 				$mapid = $wpdb->insert_id;
@@ -257,7 +259,7 @@ function wpdmp_install_data() {
 		   	    }
 		   	    
 		   	    if ($rows_affected!=1){
-		   	    	echo "Installation: error during preparing of maps (popups offset)!";
+		   	    	_e('Installation: error during preparing of maps (popups offset)!','wp-design-maps-and-places');
 		   	    }
 			   	
 				foreach ($marker_images as $marker_file){
@@ -276,16 +278,16 @@ function wpdmp_install_data() {
 							   				'markerheight' => $image_metadata['height'] ) );
 				   					
 				   				if ($rows_affected!=1){
-				   					echo "Installation: error during preparing of markers!";
+				   					_e('Installation: error during preparing of markers!','wp-design-maps-and-places');
 				   				}
 				        	}else{
-				        		echo sprintf('Installation: error during upload of the marker %s to attachment!' , $file['path']);
+				        		echo sprintf(__('Installation: error during upload of the marker %s to attachment!','wp-design-maps-and-places') , $file['path']);
 				        	}
 					}
 				}
 		   		
 		     }else{
-		     	echo sprintf('Installation: error during upload of the map %s to attachment!' , $file['path']);
+		     	echo sprintf(__('Installation: error during upload of the map %s to attachment!','wp-design-maps-and-places') , $file['path']);
 		     }
 	   }
 }
@@ -342,35 +344,37 @@ function get_default_images($subdir, $id_index){
 function wpdmp_upgrade( $new_version, $current_version, $networkwide) {
    global $wpdb;
    
-   if (function_exists('is_multisite') && is_multisite()) {
-   	   		
-   		$opt = get_option ("wpdmp_install_log");
-   		update_option( "wpdmp_install_log", $opt . "\r\nIt's a Multisite." );
-   	
-        if ($networkwide) {
-             $old_blog = $wpdb->blogid;
-
-            $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
-            foreach ($blogids as $blog_id) {
-                switch_to_blog($blog_id);
-                wpdmp_upgrade_blog( $new_version, $current_version);
-            }
-            switch_to_blog($old_blog);
-            
-        } else{
-        	$step1 = date('Y-m-d H:i:s');
-        	$opt = get_option ("wpdmp_install_log");
-        	update_option( "wpdmp_install_log", $opt . "\r\nBlog: " . $wpdb->blogid . "\r\nInstall for one blog1:" . $step1 );
-        	wpdmp_upgrade_blog( $new_version, $current_version);
-        } 
-    }else{
-       $opt = get_option ("wpdmp_install_log");
-       update_option( "wpdmp_install_log", $opt . "\r\nIt's NOT a Multisite." );
-       wpdmp_upgrade_blog( $new_version, $current_version);
-    }
-    
-    //must be the last call
-    update_site_option( "wpdmp_version", WPDMP_VERSION );
+   if ($new_version > $current_version){
+	   if (function_exists('is_multisite') && is_multisite()) {
+	   	   		
+	   		$opt = get_option ("wpdmp_install_log");
+	   		update_option( "wpdmp_install_log", $opt . "\r\nIt's a Multisite." );
+	   	
+	        if ($networkwide) {
+	             $old_blog = $wpdb->blogid;
+	
+	            $blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+	            foreach ($blogids as $blog_id) {
+	                switch_to_blog($blog_id);
+	                wpdmp_upgrade_blog( $new_version, $current_version);
+	            }
+	            switch_to_blog($old_blog);
+	            
+	        } else{
+	        	$step1 = date('Y-m-d H:i:s');
+	        	$opt = get_option ("wpdmp_install_log");
+	        	update_option( "wpdmp_install_log", $opt . "\r\nBlog: " . $wpdb->blogid . "\r\nInstall for one blog1:" . $step1 );
+	        	wpdmp_upgrade_blog( $new_version, $current_version);
+	        } 
+	    }else{
+	       $opt = get_option ("wpdmp_install_log");
+	       update_option( "wpdmp_install_log", $opt . "\r\nIt's NOT a Multisite." );
+	       wpdmp_upgrade_blog( $new_version, $current_version);
+	    }
+	    
+	    //must be the last call
+	    update_site_option( "wpdmp_version", WPDMP_VERSION );
+   }
 }
    
 /**

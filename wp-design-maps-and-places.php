@@ -6,9 +6,11 @@
 Plugin Name: WP Design Maps & Places
 Plugin URI: http://amazingweb.de/
 Description: Put Places on your own Map image (not on the Google Map as other plugins) 
-Version: 0.6.1
+Version: 0.7.1
 Author: alexanderherdt, amazingweb-gmbh
 Author URI: http://amazingweb.de/
+Text Domain:wp-design-maps-and-places
+Domain Path: /languages
 License: GPLv2 or later
 */
 
@@ -28,7 +30,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-define('WPDMP_VERSION', '0.6');
+define('WPDMP_VERSION', '0.7.1');
 define('WPDMP_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('WPDMP_PLUGIN_DIR', dirname(__FILE__) );
 
@@ -45,14 +47,22 @@ if ( !function_exists('wpdmp_load_dependencies') ):
 endif;
 wpdmp_load_dependencies();
 
-register_activation_hook( __FILE__, 'wpdmp_update_check' );
+
 //register_activation_hook( __FILE__, 'wpdmp_install_data' );
 
 if ( !function_exists('wpdmp_update_check') ):
-   function wpdmp_update_check($network_wide) {             
+   function wpdmp_update_check($network_wide) {  
+   		if (!$network_wide) {
+   			//plugins_loaded case -> do for the current blog
+   			$network_wide = false;
+   		}         
+   		//update_site_option( "wpdmp_version", "0.6" );
    		wpdmp_upgrade(WPDMP_VERSION, get_site_option( 'wpdmp_version' ),$network_wide);       
    }
 endif;
+
+register_activation_hook( __FILE__, 'wpdmp_update_check' );
+add_action( 'plugins_loaded', 'wpdmp_update_check' );
 
 if ( !function_exists('wpdmp_add_actions') ):
 	function wpdmp_add_actions() {
@@ -87,6 +97,15 @@ if ( !function_exists('wpdmp_add_actions') ):
 		add_action('wp_ajax_add_markers_to_map','wpdmp_add_markers_to_map_callback');
 		add_action('wp_ajax_save_css_and_effects','wpdmp_save_css_and_effects_callback');
 		add_action('wp_ajax_save_popup_offset','wpdmp_save_popup_offset_callback');
+		add_action('wp_ajax_save_popup_location','wpdmp_save_popup_location_callback');
+		add_action('wp_ajax_mark_free_hand_map','wpdmp_mark_free_hand_map_callback');
 	}
 endif;
 wpdmp_add_actions();
+
+if ( !function_exists('wpdmp_load_plugin_textdomain') ):
+function wpdmp_load_plugin_textdomain() {
+	load_plugin_textdomain( 'wp-design-maps-and-places',FALSE,dirname( plugin_basename( __FILE__ ) ) . '/languages');
+}
+endif;
+add_action( 'plugins_loaded', 'wpdmp_load_plugin_textdomain' );

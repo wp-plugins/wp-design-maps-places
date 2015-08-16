@@ -34,7 +34,7 @@ function learn_map(){
 	            					$jq('#refX').val(), 
 	            					$jq('#refY').val());
 	            	}else{
-	            		alert('The location not found or the \'Get Coordinates\' button not pressed');
+	            		displayPopupMsg(wpdmp_popup.alert_msg.msg,wpdmp_popup.alert_msg.title);
 	            		return;
 	            	}
 	            	$jq(this).dialog('close');           
@@ -43,28 +43,47 @@ function learn_map(){
     });
 
     
-    //attach "add ref point"-click
-    $jq("#mapoverlay").click(function(event) {
-    	
-    	var refs = get_refpoints_from_map();
-    	
-    	if (refs != null && refs.length > 1){
-    		alert("You can define only 2 reference points. To define a new one, remove one of the existing.")    		
-    	}else{    	
+    //attach "add ref point"-click    
+    attach_click_mapoverlay($info);
+}
+
+function attach_click_mapoverlay($info){
+	$jq("#mapoverlay").click(function(event) {
+		
+		var refs = get_refpoints_from_map();
+		
+		if (refs != null && refs.length > 1){
+			displayPopupMsg(wpdmp_popup.remove_ref.msg,wpdmp_popup.remove_ref.title);
+		}else{    	
 	        event.preventDefault();
 	    
 	        //save relative (to image) mouse position
 	        var posX = event.pageX - $jq('#mapimage').offset().left;
 	        var posY = event.pageY - $jq('#mapimage').offset().top;
 	
-			$jq('#refX').val(posX);
+	        $jq('#refX').val(posX);
 	        $jq('#refY').val(posY);
+	        
+	        if (get_maptype_from_map()!='freehand'){
+	        	$info.dialog('open');
+	        }else{
+	        	event.preventDefault();
+	        	
+	        	$jq('#markerdesc').css('display','block');
+	        	$jq('#addmarker').css('display','block');
+	        	
+		        //save relative (to image size) mouse position
+		        var posX = (event.pageX - $jq('#mapimage').offset().left)/$jq('#mapimage').width();
+		        var posY = (event.pageY - $jq('#mapimage').offset().top)/$jq('#mapimage').height();
 		
-	        $info.dialog('open');
-    	}
-    }).children().click(function(e) {
-    	  return false;
-    });    
+		        $jq('#freeX').val(posX);
+		        $jq('#freeY').val(posY);
+	        	
+	        }
+		}
+	}).children().click(function(e) {
+		  return false;
+	});
 }
 
 function save_ref_point(mapid,mapwidth,mapheight,address,lat,lng,x,y){
@@ -91,7 +110,7 @@ function save_ref_point(mapid,mapwidth,mapheight,address,lat,lng,x,y){
 			get_map_status(mapid);
 			reload_map(mapid,'map',true,'backend_map_manager');
 		}else{
-			alert ("FAILURE: Reference point could not be created!");
+			displayPopupMsg(wpdmp_popup.ref_fail.msg,wpdmp_popup.ref_fail.title);
 		}
 		
 		toggleProgressBar();
@@ -116,7 +135,7 @@ function save_ref_points_google(mapid,refpoints){
 			get_map_status(mapid);
 			reload_map(mapid,'map',true,'backend_map_manager');
 		}else{
-			alert ("FAILURE: Reference points could not be created!");
+			displayPopupMsg(wpdmp_popup.ref_fail.msg,wpdmp_popup.ref_fail.title);
 		}
 		
 		toggleProgressBar();
@@ -139,7 +158,7 @@ function delete_ref_point(id){
 			get_map_status(mapid);
 			reload_map($jq('#mapimage').attr('mapid'),'map',true,'backend_map_manager');			
 		}else{
-			alert ("FAILURE: Reference point could not be removed!");
+			displayPopupMsg(wpdmp_popup.ref_fail.msg,wpdmp_popup.ref_fail.title);
 			toggleProgressBar();
 		}
 	});
@@ -187,10 +206,18 @@ function add_map_onchange_handler(){
 	$jq('[id^=yoffset_]').keyup(function() {			
 		$jq("#save_popup_offset_" + $jq(this).attr('mapid')).css('display','inline');
 	});
+	
+	$jq('[id^=popup_loc_]').on('change', function() {			
+		$jq("#save_popup_location_" + $jq(this).attr('mapid')).css('display','inline');
+	});
 }
 
 function save_popup_offset(mapid,offsetx,offsety){
 	
+	if(isNaN(offsetx) || isNaN(offsety)) {
+		displayPopupMsg(wpdmp_popup.popup_offset_validation_error.msg,wpdmp_popup.popup_offset_validation_error.title);
+		return;
+	}
 	var data = {
 			action		: 'save_popup_offset',			
 			mapid		: mapid,
@@ -201,14 +228,39 @@ function save_popup_offset(mapid,offsetx,offsety){
 	
 	toggleProgressBar();
 	
-	$jq.post(ajaxurl, data, function(response) {		
-		if (response.indexOf('Error')==-1){						
+	$jq.post(ajaxurl, data, function(response) {	
+		var response_data = $jq.parseJSON(response);
+		if (response_data.code != 'ERROR'){						
 			reload_map(mapid,'map',true,'backend_map_manager');
 		}else{
-			alert (response);
+			displayPopupMsg(response_data.msg);
 		}
 		
-		$jq("#save_popup_offset_" + mapid).css('display','none');
+		$jq("#save_popup_offset_" + mapid).css('display','none');		
+		toggleProgressBar();
+	});
+}
+
+function save_popup_location(mapid,val){
+	
+	var data = {
+			action		: 'save_popup_location',			
+			mapid		: mapid,
+			val			: val,			
+			nt			: (new Date().getTime())
+		};
+	
+	toggleProgressBar();
+	
+	$jq.post(ajaxurl, data, function(response) {	
+		var response_data = $jq.parseJSON(response);
+		if (response_data.code != 'ERROR'){						
+			reload_map(mapid,'map',true,'backend_map_manager');
+		}else{
+			displayPopupMsg(response_data.msg);
+		}
+		
+		$jq("#save_popup_location_" + mapid).css('display','none');
 		toggleProgressBar();
 	});
 }
@@ -246,10 +298,9 @@ function delete_map(mapid){
 	toggleProgressBar();
 	
 	$jq.post(ajaxurl, data, function(response) {
-		if (response.indexOf('Error')!=-1){
-			alert(response);
-			toggleProgressBar();
-			return;
+		var response_data = $jq.parseJSON(response);
+		if (response_data.code == 'ERROR'){
+			displayPopupMsg(response_data.msg);
 		}else{
 			$jq('#map_'+mapid).parent().remove();
 			//$jq('#mapinfo_'+mapid).remove();
@@ -272,8 +323,9 @@ function add_map(attachmentid){
 	
 	$jq.post(ajaxurl, data, function(response) {
 		
-		if (response.indexOf('Error')!=-1){
-			alert(response);
+		var response_data = $jq.parseJSON(response);
+		if (response_data.code == 'ERROR'){
+			displayPopupMsg(response_data.msg);
 			toggleProgressBar();
 			return;
 		}
@@ -347,17 +399,18 @@ function add_markers_to_map(map,attachmentids){
 	
 	$jq.post(ajaxurl, data, function(response) {
 		
-		if (response.indexOf('Error')!=-1){
-			alert(response);
+		var response_data = $jq.parseJSON(response);
+		if (response_data.code == 'ERROR'){
+			displayPopupMsg(response_data.msg);
 			toggleProgressBar();
 			return;
 		}
 		
 		$jq('#col-left').empty();
-		$jq('#col-left').append(response);
+		$jq('#col-left').append(response_data);
 		
 		if ($jq('.ajaxmessage').length > 0){
-			alert($jq('.ajaxmessage').text());
+			displayPopupMsg($jq('.ajaxmessage').text());
 			$jq('.ajaxmessage').remove();
 		}
 		
@@ -399,7 +452,7 @@ function position_google_map(address){
 	    	map.fitBounds(results[0].geometry.bounds)
 	    }else{
 	    	//toggleProgressBar();
-	    	alert ("Please check the address, Google returns: " + status);
+	    	displayPopupMsg(wpdmp_popup.check_addr.msg,wpdmp_popup.check_addr.title);
 	    }
 	  });	
 }
@@ -470,5 +523,34 @@ function init_sliders(){
 				$jq( "#map_draggable" ).css( "height", mh*2 - $jq("#vslider").slider("value"));
 			}
 		}
+	});
+}
+
+function mark_free_hand_map(mapid){
+	var data = {
+			action  	: 'mark_free_hand_map',
+			mapid		: mapid,			
+			nt			: (new Date().getTime())
+		};
+	
+	//alert ("add marker called!");
+	
+	toggleProgressBar();
+	
+	$jq.post(ajaxurl, data, function(response) {
+		
+		var response_data = $jq.parseJSON(response);
+		
+		if (response_data.code == 'ERROR'){
+			displayPopupMsg(response_data.msg);
+			toggleProgressBar();
+			return;
+		}
+		else{			
+			get_map_status(mapid);
+			reload_map(mapid,'map',true,'backend_map_manager');
+		}
+		
+		toggleProgressBar();
 	});
 }

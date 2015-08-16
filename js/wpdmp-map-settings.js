@@ -6,6 +6,10 @@ var $jq = jQuery.noConflict();
 
 function add_lang(lang){
 	
+	if(lang.length > 2) {
+		displayPopupMsg(wpdmp_popup.add_lang_fail.msg,wpdmp_popup.add_lang_fail.title);
+		return;
+	}
 	var data = {
 			action  	: 'add_lang',
 			lang		: lang,			
@@ -15,12 +19,13 @@ function add_lang(lang){
 	toggleProgressBar();
 	
 	$jq.post(ajaxurl, data, function(response) {
-		if (response.indexOf('Error')!=-1){
-			alert(response);
+		var response_data = $jq.parseJSON(response);
+		if (response_data.code == 'ERROR'){
+			displayPopupMsg(response_data.msg);
 			toggleProgressBar();
 			return;
 		}else{
-			$jq('#langs').append(response);
+			$jq('#langs').append(response_data);
 			$jq('#default_lang').append("<option>"+lang+"</option>");
 			$jq('#addlang_edit').val('');
 		}
@@ -103,7 +108,7 @@ function save_css_and_effects(css,effects){
 	
 	$jq.post(ajaxurl, data, function(response) {
 		if (response.indexOf('Error')!=-1){
-			alert(response);
+			displayPopupMsg(response);
 			toggleProgressBar();
 			return;
 		}else{
