@@ -6,7 +6,7 @@
 Plugin Name: WP Design Maps & Places
 Plugin URI: http://amazingweb.de/
 Description: Put Places on your own Map image (not on the Google Map as other plugins) 
-Version: 0.7.1
+Version: 1.0
 Author: alexanderherdt, amazingweb-gmbh
 Author URI: http://amazingweb.de/
 Text Domain:wp-design-maps-and-places
@@ -30,7 +30,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-define('WPDMP_VERSION', '0.7.1');
+define('WPDMP_VERSION', '1.0');
 define('WPDMP_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('WPDMP_PLUGIN_DIR', dirname(__FILE__) );
 
