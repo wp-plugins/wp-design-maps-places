@@ -221,7 +221,7 @@ if ( !function_exists('wpdmp_get_map_status') ):
 			<?php }
 			
 			if($map['type']!=='freehand'){?>
-				<a href="#" onclick="reload_map(<?php echo $map['id']; ?>,'map',true,'backend_map_manager_google');"><?php _e('Calibrate via Google Map','wp-design-maps-and-places'); ?></a><br/>
+				<br/><a href="#" onclick="reload_map(<?php echo $mapid; ?>,'map',true,'backend_map_manager_google');"><?php _e('Calibrate via Google Map','wp-design-maps-and-places'); ?></a><br/>
 				<!--a href="admin.php?page=wpdmp_map_manager&ui=refpoints&mapid=<?php echo $map['id'];?>" onclick="">Calibrate manually</a-->
          	<?php }
 		}
