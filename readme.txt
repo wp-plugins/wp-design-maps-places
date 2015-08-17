@@ -4,7 +4,7 @@ Donate link: http://amazingweb.de/donation/
 Tags: google, google map, google maps, google places, designer map, map, map markers, maps, wp google map, wp google maps, wp maps
 Requires at least: 3.6
 Tested up to: 4.2.4
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,10 @@ That's it!
 4. Put the shortcut on a post or page and enjoy your Map your website!
 
 == Changelog ==
+v1.0.1 (08.2015)
+
+* Small concurrency bug by positioning of markers solved.
+
 v1.0 (08.2015)
 
 * 'Freehand' map type added. You can use this to place marker on an image WITHOUT GEO coordinates. It can be used e.g. to show a plan of an exhibition.

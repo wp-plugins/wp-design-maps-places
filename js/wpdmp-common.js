@@ -162,7 +162,7 @@ function reload_map(mapid,id,learn,mode){
 		};
 	
 	if (id == 'map-front'){	
-		$jq('#mapimage').imagesLoaded(function( $images, $proper, $broken ){
+		$jq('#mapcontainer').imagesLoaded(function( $images, $proper, $broken ){
 			$jq('#mapprogressbar').css('display','block');
 			
 			var w = getImageWidth('mapimage');
@@ -194,7 +194,7 @@ function reload_map(mapid,id,learn,mode){
 			$jq('#map').append(response);			
 						
 			if (mode == 'backend_map_manager' || mode == 'backend_marker_manager'){
-				$jq('#mapimage').imagesLoaded(function( $images, $proper, $broken ){				
+				$jq('#mapcontainer').imagesLoaded(function( $images, $proper, $broken ){				
 					$jq('#mapoverlay')
 						//.css('top', '-' + ($jq('#mapimage').height()+4) + 'px')
 						.css('top', '0px')
